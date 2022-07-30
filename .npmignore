@@ -1,0 +1,12 @@
+# .npmignore
+.vscode
+node_modules
+src
+dist/test
+logs
+configs
+output
+**/*.spec.js
+**/*.spec.js.map
+**/*.spec.d.ts
+**/*.tgz

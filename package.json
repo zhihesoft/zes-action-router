@@ -1,0 +1,38 @@
+{
+  "name": "zes_action_router",
+  "version": "1.0.0",
+  "description": "zhihesoft essential system: action router library",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha ./dist --recursive --extension spec.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zhihesoft/zes_action_router.git"
+  },
+  "keywords": [
+    "zes",
+    "action",
+    "router"
+  ],
+  "author": "Stanley Hou",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zhihesoft/zes_action_router/issues"
+  },
+  "homepage": "https://github.com/zhihesoft/zes_action_router#readme",
+  "dependencies": {
+    "log4js": "^6.6.1",
+    "reflect-metadata": "^0.1.13",
+    "tsyringe": "^4.7.0"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.3.1",
+    "@types/mocha": "^9.1.1",
+    "@typescript-eslint/eslint-plugin": "^5.31.0",
+    "@typescript-eslint/parser": "^5.31.0",
+    "chai": "^4.3.6",
+    "eslint": "^8.20.0",
+    "mocha": "^10.0.0"
+  }
+}
