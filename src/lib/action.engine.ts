@@ -1,21 +1,21 @@
 import { getLogger } from "log4js";
 import { container, InjectionToken } from "tsyringe";
 import { ArgumentProvider } from "./argument.provider";
-import { MessageProcessor } from "./message.processor";
-import { MessageRouting } from "./message.routing";
-import { MessageRoutingOption } from "./message.routing.option";
+import { ActionProcessor } from "./action.processor";
+import { ActionRouting } from "./action.routing";
+import { ActionRoutingOption } from "./action.routing.option";
 
-export class MessageEngine {
+export class ActionEngine {
 
-    constructor(routings: MessageRouting[]) {
+    constructor(routings: ActionRouting[]) {
         if (!routings) {
             throw new Error(`routings cannot be null`);
         }
         routings.forEach(i => this.parseRouting("", i));
     }
 
-    private tokens = new Map<string, { token: InjectionToken; option?: MessageRoutingOption }>();
-    private handlers = new Map<string, MessageProcessor>();
+    private tokens = new Map<string, { token: InjectionToken; option?: ActionRoutingOption }>();
+    private handlers = new Map<string, ActionProcessor>();
     private argumentProviders: Map<string, ArgumentProvider> = new Map();
     private argumentNames: Map<string, string[]> = new Map();
 
@@ -63,11 +63,11 @@ export class MessageEngine {
         return Array.from(this.tokens.keys());
     }
 
-    public getOption(path: string): MessageRoutingOption | undefined {
+    public getOption(path: string): ActionRoutingOption | undefined {
         return this.tokens.get(path)?.option;
     }
 
-    private parseRouting(parentPath: string, routing: MessageRouting) {
+    private parseRouting(parentPath: string, routing: ActionRouting) {
         let path = routing.path.startsWith("/") ? routing.path.substring(1) : routing.path;
         path = `${parentPath}/${path}`;
         if (Array.isArray(routing.token)) {
@@ -118,4 +118,4 @@ function parseParameterNames(fnStr: string) {
     return result || [];
 }
 
-const logger = getLogger(MessageEngine.name);
+const logger = getLogger(ActionEngine.name);

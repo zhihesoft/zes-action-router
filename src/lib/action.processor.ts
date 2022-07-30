@@ -1,6 +1,6 @@
 /**
  * Message processor
  */
- export interface MessageProcessor {
+export interface ActionProcessor {
     process(...args: unknown[]): Promise<unknown>;
 }

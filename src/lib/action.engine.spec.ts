@@ -1,24 +1,24 @@
 import { assert } from "chai";
 import { injectable } from "tsyringe";
-import { MessageEngine } from "./message.engine";
-import { MessageProcessor } from "./message.processor";
-import { MessageRouting } from "./message.routing";
+import { ActionEngine } from "./action.engine";
+import { ActionProcessor } from "./action.processor";
+import { ActionRouting } from "./action.routing";
 
 @injectable()
-class TestProcess implements MessageProcessor {
+class TestProcess implements ActionProcessor {
     async process(message: string): Promise<string> {
         return message;
     }
 }
 
 @injectable()
-class TestProcess2 implements MessageProcessor {
+class TestProcess2 implements ActionProcessor {
     async process(test: string): Promise<string> {
         return test;
     }
 }
 
-const testRouter: MessageRouting[] = [
+const testRouter: ActionRouting[] = [
     { path: "one", token: TestProcess, option: { security: false } },
     { path: "two", token: TestProcess },
     { path: "three", token: TestProcess },
@@ -31,7 +31,7 @@ const testRouter: MessageRouting[] = [
     }
 ]
 
-const engine: MessageEngine = new MessageEngine(testRouter);
+const engine: ActionEngine = new ActionEngine(testRouter);
 
 describe(`message.engine`, () => {
 
