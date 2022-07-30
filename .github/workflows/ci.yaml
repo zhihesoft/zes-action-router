@@ -16,11 +16,9 @@ jobs:
 
     strategy:
       matrix:
-        # Test the latest version of Node.js plus the last two LTS versions.
+        # Test only on the latest LTS version of Node.js.
         node-version:
-          - "*"
           - lts/*
-          - lts/-1
 
     steps:
       - uses: actions/checkout@v3
