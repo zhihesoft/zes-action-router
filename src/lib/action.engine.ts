@@ -78,8 +78,7 @@ export class ActionEngine {
     }
 
     private getArgumentValue(name: string, args: unknown): unknown {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const data = <any>args;
+        const data = <{ [name: string]: unknown }>args;
         if (data[name]) {
             return data[name];
         }

@@ -4,6 +4,7 @@
   "description": "zhihesoft essential system: action router library",
   "main": "index.js",
   "scripts": {
+    "lint": "npx eslint src/",
     "test": "mocha ./dist --recursive --extension spec.js"
   },
   "repository": {
