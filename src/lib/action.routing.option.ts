@@ -2,6 +2,6 @@
  * Action Routing Options
  */
 export interface ActionRoutingOption {
-    verb?: "GET" | "POST" | "ANY";
+    verb?: string;
     security?: boolean;
 }
