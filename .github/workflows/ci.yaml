@@ -20,6 +20,7 @@ jobs:
         node-version:
           - "*"
           - lts/*
+          - lts/-1
 
     steps:
       - uses: actions/checkout@v3
