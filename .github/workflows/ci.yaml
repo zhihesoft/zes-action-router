@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+      - release-*
+  pull_request:
+    branches:
+      - main
+      - release-*
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        # Test the latest version of Node.js plus the last two LTS versions.
+        node-version:
+          - "*"
+          - lts/*
+          - lts/-1
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 5
+      - name: Use node version ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          check-latest: true
+      - run: npm ci
+
+      - name: Tests
+        run: npm test -- --no-lint
+
+      - name: Linter
+        run: npm run lint:ci
+

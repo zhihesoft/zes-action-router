@@ -1,6 +1,6 @@
 {
   "name": "zes_action_router",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "zhihesoft essential system: action router library",
   "main": "index.js",
   "scripts": {
