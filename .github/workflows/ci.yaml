@@ -20,7 +20,6 @@ jobs:
         node-version:
           - "*"
           - lts/*
-          - lts/-1
 
     steps:
       - uses: actions/checkout@v3
@@ -32,10 +31,6 @@ jobs:
           node-version: ${{ matrix.node-version }}
           check-latest: true
       - run: npm ci
-
-      - name: Tests
-        run: npm test -- --no-lint
-
-      - name: Linter
-        run: npm run lint:ci
-
+      - run: npm build
+      - run: npm test -- --no-lint
+      - run: npm run lint:ci
