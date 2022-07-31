@@ -1,9 +1,15 @@
 import "reflect-metadata";
+import log4js from "log4js";
 import { assert } from "chai";
 import { injectable } from "tsyringe";
 import { ActionRouter } from "../lib/action.router";
 import { ActionProcessor } from "../lib/action.processor";
 import { ActionRouting } from "../lib/action.routing";
+import { ActionHook, ActionHookType } from "../lib/action.hook";
+import { ActionRoutingOption } from "../lib/action.routing.option";
+import { getLogger } from "log4js";
+
+log4js.configure("./log4js-test.json");
 
 @injectable()
 class TestProcess implements ActionProcessor {
@@ -19,6 +25,14 @@ class TestProcess2 implements ActionProcessor {
     }
 }
 
+class TestBeforeHook implements ActionHook {
+    hook(path: string, option: ActionRoutingOption | undefined, args: unknown): unknown {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        return Object.assign(<any>args, { test: "hello" });
+    }
+
+}
+
 const testRouter: ActionRouting[] = [
     { path: "one", token: TestProcess, option: { security: false } },
     { path: "two", token: TestProcess },
@@ -29,21 +43,30 @@ const testRouter: ActionRouting[] = [
             { path: "two", token: TestProcess2, option: { security: false } },
             { path: "three", token: TestProcess },
         ]
-    }
-]
+    },
+    {
+        path: "fold/fold", token: [
+            { path: "one", token: TestProcess },
+            { path: "two", token: TestProcess2, option: { security: false } },
+            { path: "three", token: TestProcess },
+        ]
+    },
+];
+
 
 const engine: ActionRouter = new ActionRouter(testRouter);
 
 describe(`zes_action_router test suit`, () => {
     before(() => {
-        engine.registerArgument("test", () => "test");
+        engine.hook(ActionHookType.before, new TestBeforeHook());
     });
 
-    it(`get all path should return 6`, async () => {
-        assert.equal(engine?.getPaths().length, 6);
+    it(`get all path should return 9`, async () => {
+        getLogger("test").info(`all path: ${engine.getPaths()}`);
+        assert.equal(engine?.getPaths().length, 9);
     });
-    it(`insecurity path should be 2`, async () => {
-        assert.equal(engine?.getInsecurityPaths().length, 2);
+    it(`insecurity path should be 3`, async () => {
+        assert.equal(engine?.getInsecurityPaths().length, 3);
     });
     it(`/fold/two should be insecurity`, async () => {
         assert(engine.getInsecurityPaths().indexOf("/fold/two") >= 0, JSON.stringify(engine.getInsecurityPaths()));
@@ -56,8 +79,8 @@ describe(`zes_action_router test suit`, () => {
         const ret = await engine.process("/fold/three", { message1: "succ" });
         assert.isUndefined(ret);
     });
-    it(`process should return test for {message:"succ"}`, async () => {
-        const ret = await engine.process("/fold/two", { message: "succ" });
-        assert.equal(ret, "test");
+    it(`process should return hello for {message:"succ"}`, async () => {
+        const ret = await engine.process("/fold/fold/two", { message: "succ" });
+        assert.equal(ret, "hello");
     });
 });

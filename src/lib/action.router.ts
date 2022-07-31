@@ -1,6 +1,6 @@
 import { getLogger } from "log4js";
 import { container, InjectionToken } from "tsyringe";
-import { ArgumentProvider } from "./argument.provider";
+import { ActionHook, ActionHookType } from "./action.hook";
 import { ActionProcessor } from "./action.processor";
 import { ActionRouting } from "./action.routing";
 import { ActionRoutingOption } from "./action.routing.option";
@@ -19,8 +19,17 @@ export class ActionRouter {
 
     private tokens = new Map<string, { token: InjectionToken; option?: ActionRoutingOption }>();
     private handlers = new Map<string, ActionProcessor>();
-    private argumentProviders: Map<string, ArgumentProvider> = new Map();
     private argumentNames: Map<string, string[]> = new Map();
+    private beforeHooks: ActionHook[] = [];
+    private afterHooks: ActionHook[] = [];
+
+    public hook(type: ActionHookType, hook: ActionHook) {
+        if (type == ActionHookType.before) {
+            this.beforeHooks.push(hook);
+        } else {
+            this.afterHooks.push(hook);
+        }
+    }
 
     /**
      * Process message
@@ -48,12 +57,12 @@ export class ActionRouter {
         }
 
         const ps: string[] = this.getArgumentNames(path, handler?.process.toString());
+        const opt = this.getOption(path);
+        args = this.beforeHooks.reduce((now, hook) => hook.hook(path, opt, now), args);
         const values = ps.map(i => this.getArgumentValue(i, args));
-        return handler.process(...values);
-    }
-
-    public registerArgument(name: string, provider: ArgumentProvider) {
-        this.argumentProviders.set(name, provider);
+        let ret = await handler.process(...values);
+        ret = this.afterHooks.reduce((now, hook) => hook.hook(path, opt, now), ret);
+        return ret;
     }
 
     public getInsecurityPaths(): string[] {
@@ -84,12 +93,6 @@ export class ActionRouter {
         const data = <{ [name: string]: unknown }>args;
         if (data[name]) {
             return data[name];
-        }
-        if (this.argumentProviders.has(name)) {
-            const fun = this.argumentProviders.get(name);
-            if (fun) {
-                return fun(args);
-            }
         }
         logger.error(`cannot find argument for (${name})`);
         return undefined;
