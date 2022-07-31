@@ -10,7 +10,7 @@ Action Router Library is a part of Zhihesoft Essential System, it is a library f
 For the latest stable version:
 
 ```bash
-npm install zes_action_router
+npm install zes-action-router
 ```
 
 

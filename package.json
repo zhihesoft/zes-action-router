@@ -1,5 +1,5 @@
 {
-  "name": "zes_action_router",
+  "name": "zes-action-router",
   "version": "1.0.6",
   "description": "zhihesoft essential system: action router library",
   "main": "./dist/index.js",
@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zhihesoft/zes_action_router.git"
+    "url": "git+https://github.com/zhihesoft/zes-action-router.git"
   },
   "keywords": [
     "zes",
@@ -20,9 +20,9 @@
   "author": "Stanley Hou",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/zhihesoft/zes_action_router/issues"
+    "url": "https://github.com/zhihesoft/zes-action-router/issues"
   },
-  "homepage": "https://github.com/zhihesoft/zes_action_router#readme",
+  "homepage": "https://github.com/zhihesoft/zes-action-router#readme",
   "dependencies": {
     "log4js": "^6.6.1",
     "reflect-metadata": "^0.1.13",
