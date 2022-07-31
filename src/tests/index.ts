@@ -1,8 +1,9 @@
+import "reflect-metadata";
 import { assert } from "chai";
 import { injectable } from "tsyringe";
-import { ActionEngine } from "./action.engine";
-import { ActionProcessor } from "./action.processor";
-import { ActionRouting } from "./action.routing";
+import { ActionEngine } from "../lib/action.engine";
+import { ActionProcessor } from "../lib/action.processor";
+import { ActionRouting } from "../lib/action.routing";
 
 @injectable()
 class TestProcess implements ActionProcessor {
@@ -33,8 +34,7 @@ const testRouter: ActionRouting[] = [
 
 const engine: ActionEngine = new ActionEngine(testRouter);
 
-describe(`message.engine`, () => {
-
+describe(`zes_action_router test suit`, () => {
     before(() => {
         engine.registerArgument("test", () => "test");
     });
@@ -60,5 +60,4 @@ describe(`message.engine`, () => {
         const ret = await engine.process("/fold/two", { message: "succ" });
         assert.equal(ret, "test");
     });
-
 });

@@ -1,12 +1,12 @@
 {
   "name": "zes_action_router",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "zhihesoft essential system: action router library",
   "main": "./dist/index.js",
   "scripts": {
     "build": "tsc",
     "lint": "npx eslint src/",
-    "test": "mocha ./dist --recursive --extension spec.js"
+    "test": "mocha ./dist/tests"
   },
   "repository": {
     "type": "git",
