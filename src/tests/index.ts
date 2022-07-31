@@ -1,7 +1,7 @@
 import "reflect-metadata";
 import { assert } from "chai";
 import { injectable } from "tsyringe";
-import { ActionEngine } from "../lib/action.engine";
+import { ActionRouter } from "../lib/action.router";
 import { ActionProcessor } from "../lib/action.processor";
 import { ActionRouting } from "../lib/action.routing";
 
@@ -32,7 +32,7 @@ const testRouter: ActionRouting[] = [
     }
 ]
 
-const engine: ActionEngine = new ActionEngine(testRouter);
+const engine: ActionRouter = new ActionRouter(testRouter);
 
 describe(`zes_action_router test suit`, () => {
     before(() => {

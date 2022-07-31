@@ -5,7 +5,10 @@ import { ActionProcessor } from "./action.processor";
 import { ActionRouting } from "./action.routing";
 import { ActionRoutingOption } from "./action.routing.option";
 
-export class ActionEngine {
+/**
+ * Action Router
+ */
+export class ActionRouter {
 
     constructor(routings: ActionRouting[]) {
         if (!routings) {
@@ -117,4 +120,4 @@ function parseParameterNames(fnStr: string) {
     return result || [];
 }
 
-const logger = getLogger(ActionEngine.name);
+const logger = getLogger(ActionRouter.name);
