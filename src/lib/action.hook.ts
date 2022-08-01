@@ -5,6 +5,11 @@ export enum ActionHookType {
     after,
 }
 
+export interface ActionHookContext {
+    path: string;
+    option?: ActionRoutingOption;
+}
+
 export interface ActionHook {
-    hook(path: string, option: ActionRoutingOption | undefined, args: unknown): unknown;
+    hook(context: ActionHookContext, args: unknown): unknown;
 }

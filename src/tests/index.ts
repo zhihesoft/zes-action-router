@@ -5,8 +5,7 @@ import { injectable } from "tsyringe";
 import { ActionRouter } from "../lib/action.router";
 import { ActionProcessor } from "../lib/action.processor";
 import { ActionRouting } from "../lib/action.routing";
-import { ActionHook, ActionHookType } from "../lib/action.hook";
-import { ActionRoutingOption } from "../lib/action.routing.option";
+import { ActionHook, ActionHookContext, ActionHookType } from "../lib/action.hook";
 import { getLogger } from "log4js";
 
 log4js.configure("./log4js-test.json");
@@ -26,9 +25,8 @@ class TestProcess2 implements ActionProcessor {
 }
 
 class TestBeforeHook implements ActionHook {
-    hook(path: string, option: ActionRoutingOption | undefined, args: unknown): unknown {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        return Object.assign(<any>args, { test: "hello" });
+    hook(context: ActionHookContext, args: unknown): unknown {
+        return Object.assign(<object>args, { test: "hello" });
     }
 
 }

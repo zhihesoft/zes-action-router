@@ -57,11 +57,11 @@ export class ActionRouter {
         }
 
         const ps: string[] = this.getArgumentNames(path, handler?.process.toString());
-        const opt = this.getOption(path);
-        args = this.beforeHooks.reduce((now, hook) => hook.hook(path, opt, now), args);
+        const option = this.getOption(path);
+        args = this.beforeHooks.reduce((now, hook) => hook.hook({ path, option }, now), args);
         const values = ps.map(i => this.getArgumentValue(i, args));
         let ret = await handler.process(...values);
-        ret = this.afterHooks.reduce((now, hook) => hook.hook(path, opt, now), ret);
+        ret = this.afterHooks.reduce((now, hook) => hook.hook({ path, option }, now), ret);
         return ret;
     }
 
