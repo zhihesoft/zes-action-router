@@ -105,3 +105,4 @@ dist
 
 # ignore package-lock.json
 package-lock.json
+/package-lock.json
