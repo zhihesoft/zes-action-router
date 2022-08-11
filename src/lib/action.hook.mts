@@ -1,4 +1,4 @@
-import { ActionRoutingOption } from "./action.routing.option";
+import { ActionRoutingOption } from "./action.routing.option.mjs";
 
 export enum ActionHookType {
     before,

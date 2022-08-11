@@ -1,9 +1,10 @@
-import { getLogger } from "log4js";
+import log4js from "log4js";
 import { container, InjectionToken } from "tsyringe";
-import { ActionHook, ActionHookType } from "./action.hook";
-import { ActionProcessor } from "./action.processor";
-import { ActionRouting } from "./action.routing";
-import { ActionRoutingOption } from "./action.routing.option";
+import { parseParamNames } from "zes-util";
+import { ActionHook, ActionHookType } from "./action.hook.mjs";
+import { ActionProcessor } from "./action.processor.mjs";
+import { ActionRouting } from "./action.routing.mjs";
+import { ActionRoutingOption } from "./action.routing.option.mjs";
 
 /**
  * Action Router
@@ -56,7 +57,7 @@ export class ActionRouter {
             this.handlers.set(path, handler);
         }
 
-        const ps: string[] = this.getArgumentNames(path, handler?.process.toString());
+        const ps: string[] = this.getArgumentNames(path, handler);
         const option = this.getOption(path);
         args = this.beforeHooks.reduce((now, hook) => hook.hook({ path, option }, now), args);
         const values = ps.map(i => this.getArgumentValue(i, args));
@@ -90,7 +91,7 @@ export class ActionRouter {
     }
 
     private getArgumentValue(name: string, args: unknown): unknown {
-        const data = <{ [name: string]: unknown }>args;
+        const data = args as { [name: string]: unknown };
         if (data[name]) {
             return data[name];
         }
@@ -98,7 +99,7 @@ export class ActionRouter {
         return undefined;
     }
 
-    private getArgumentNames(path: string, fnStr: string): string[] {
+    private getArgumentNames(path: string, processor: ActionProcessor): string[] {
         if (this.argumentNames.has(path)) {
             const ret = this.argumentNames.get(path);
             if (!ret) {
@@ -107,20 +108,10 @@ export class ActionRouter {
             return ret;
         }
 
-        const ps = parseParameterNames(fnStr);
+        const ps = parseParamNames(processor.process);
         this.argumentNames.set(path, ps);
         return ps;
     }
-
 }
 
-const STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
-const ARGUMENT_NAMES = /([^\s,]+)/g;
-
-function parseParameterNames(fnStr: string) {
-    fnStr = fnStr.replace(STRIP_COMMENTS, '');
-    const result = fnStr.slice(fnStr.indexOf('(') + 1, fnStr.indexOf(')')).match(ARGUMENT_NAMES);
-    return result || [];
-}
-
-const logger = getLogger(ActionRouter.name);
+const logger = log4js.getLogger(ActionRouter.name);

@@ -2,11 +2,10 @@ import "reflect-metadata";
 import log4js from "log4js";
 import { assert } from "chai";
 import { injectable } from "tsyringe";
-import { ActionRouter } from "../lib/action.router";
-import { ActionProcessor } from "../lib/action.processor";
-import { ActionRouting } from "../lib/action.routing";
-import { ActionHook, ActionHookContext, ActionHookType } from "../lib/action.hook";
-import { getLogger } from "log4js";
+import { ActionRouter } from "../lib/action.router.mjs";
+import { ActionProcessor } from "../lib/action.processor.mjs";
+import { ActionRouting } from "../lib/action.routing.mjs";
+import { ActionHook, ActionHookContext, ActionHookType } from "../lib/action.hook.mjs";
 
 log4js.configure("./log4js-test.json");
 
@@ -26,7 +25,7 @@ class TestProcess2 implements ActionProcessor {
 
 class TestBeforeHook implements ActionHook {
     hook(context: ActionHookContext, args: unknown): unknown {
-        return Object.assign(<object>args, { test: "hello" });
+        return Object.assign(args as object, { test: "hello" });
     }
 
 }
@@ -60,7 +59,7 @@ describe(`zes_action_router test suit`, () => {
     });
 
     it(`get all path should return 9`, async () => {
-        getLogger("test").info(`all path: ${engine.getPaths()}`);
+        log4js.getLogger("test").info(`all path: ${engine.getPaths()}`);
         assert.equal(engine?.getPaths().length, 9);
     });
     it(`insecurity path should be 3`, async () => {

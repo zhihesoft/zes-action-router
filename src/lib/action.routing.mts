@@ -1,5 +1,5 @@
 import { InjectionToken } from "tsyringe";
-import { ActionRoutingOption } from "./action.routing.option";
+import { ActionRoutingOption } from "./action.routing.option.mjs";
 
 /**
  * Action Routing
