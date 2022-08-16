@@ -11,7 +11,13 @@ import { ActionRoutingOption } from "./action.routing.option.mjs";
  */
 export class ActionRouter {
 
-    constructor(routings: ActionRouting[]) {
+    /**
+     * Create a new ActionRouter instance
+     * @param routings action routings
+     */
+    constructor(
+        routings: ActionRouting[]
+    ) {
         if (!routings) {
             throw new Error(`routings cannot be null`);
         }
@@ -24,6 +30,11 @@ export class ActionRouter {
     private beforeHooks: ActionHook[] = [];
     private afterHooks: ActionHook[] = [];
 
+    /**
+     * Add hook to ActionRouter
+     * @param type Hook type
+     * @param action Hook Action
+     */
     public hook(type: ActionHookType, action: ActionHook) {
         if (type == ActionHookType.before) {
             this.beforeHooks.push(action);
@@ -66,16 +77,29 @@ export class ActionRouter {
         return ret;
     }
 
+    /**
+     * Return all insecurity paths in router
+     * @returns path array
+     */
     public getInsecurityPaths(): string[] {
         return Array.from(this.tokens.entries())
             .filter(i => i[1].option && i[1].option.security != undefined && !i[1].option.security)
             .map(i => i[0]);
     }
 
+    /**
+     * Return all paths in router
+     * @returns path array
+     */
     public getPaths() {
         return Array.from(this.tokens.keys());
     }
 
+    /**
+     * Get option of spec path
+     * @param path path
+     * @returns option of this path or undefined if no opt
+     */
     public getOption(path: string): ActionRoutingOption | undefined {
         return this.tokens.get(path)?.option;
     }
