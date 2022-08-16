@@ -1,6 +1,6 @@
 import log4js from "log4js";
 import { container, InjectionToken } from "tsyringe";
-import { parseParamNames } from "zes-util";
+import zes from "zes-util";
 import { ActionHook, ActionHookType } from "./action.hook.mjs";
 import { ActionProcessor } from "./action.processor.mjs";
 import { ActionRouting } from "./action.routing.mjs";
@@ -24,11 +24,11 @@ export class ActionRouter {
     private beforeHooks: ActionHook[] = [];
     private afterHooks: ActionHook[] = [];
 
-    public hook(type: ActionHookType, hook: ActionHook) {
+    public hook(type: ActionHookType, action: ActionHook) {
         if (type == ActionHookType.before) {
-            this.beforeHooks.push(hook);
+            this.beforeHooks.push(action);
         } else {
-            this.afterHooks.push(hook);
+            this.afterHooks.push(action);
         }
     }
 
@@ -108,7 +108,7 @@ export class ActionRouter {
             return ret;
         }
 
-        const ps = parseParamNames(processor.process);
+        const ps = zes.misc.parseParamNames(processor.process);
         this.argumentNames.set(path, ps);
         return ps;
     }
